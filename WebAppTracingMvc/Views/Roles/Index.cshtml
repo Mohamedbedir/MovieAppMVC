@@ -1,0 +1,99 @@
+﻿@model IEnumerable<RoleViewModel>
+
+@{
+    ViewData["Title"] = "Roles Management";
+}
+
+<div class="container mt-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-0">Roles</h3>
+            <small class="text-muted">Manage system roles</small>
+        </div>
+
+        <a asp-action="Create" class="btn btn-primary shadow-sm px-3">
+            <i class="bi bi-plus-circle me-1"></i> New Role
+        </a>
+    </div>
+
+    <!-- Card -->
+    <div class="card shadow-lg border-0 rounded-3">
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Role Name</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center py-5 text-muted">
+                                    <i class="bi bi-shield-lock fs-3 d-block mb-2"></i>
+                                    No roles found
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            int count = 1;
+
+                            @foreach (var role in Model)
+                            {
+                                <tr>
+
+                                    <td class="fw-semibold text-muted">
+                                        @count
+                                    </td>
+
+                                    <td>
+                                        <span class="badge bg-secondary fs-6 px-3 py-2">
+                                            @role.Name
+                                        </span>
+                                    </td>
+
+                                    <td class="text-end">
+
+                                        <a asp-action="Edit"
+                                           asp-route-id="@role.Id"
+                                           class="btn btn-sm btn-warning me-1">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+
+                                        <a asp-action="Delete"
+                                           asp-route-id="@role.Id"
+                                           class="btn btn-sm btn-danger"
+                                           onclick="return confirm('Delete this role?')">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                                count++;
+                            }
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

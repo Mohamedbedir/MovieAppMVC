@@ -1,0 +1,136 @@
+﻿@model ProducerViewModel
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+    .card-box {
+        max-width: 600px;
+        margin: auto;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        background: #fff;
+    }
+
+    .preview-container {
+        height: 200px;
+        border: 2px dashed #ddd;
+        border-radius: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #f8f9fa;
+        position: relative;
+    }
+
+    .preview-img {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: none;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .placeholder-icon {
+        font-size: 50px;
+        color: #aaa;
+    }
+</style>
+
+<div class="container mt-5">
+
+    <div class="card-box">
+
+        <h3 class="text-center mb-4">✏️ Edit Producer</h3>
+
+        <form asp-action="Edit"
+              method="post"
+              enctype="multipart/form-data"
+              id="editForm">
+
+            <input type="hidden" asp-for="Id" />
+
+            <!-- NAME -->
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input asp-for="FullName" class="form-control" />
+            </div>
+
+            <!-- BIO -->
+            <div class="mb-3">
+                <label class="form-label">Bio</label>
+                <textarea asp-for="Bio" class="form-control"></textarea>
+            </div>
+
+            <!-- IMAGE INPUT -->
+            <div class="mb-3">
+                <label class="form-label">Image</label>
+                <input type="file"
+                       id="imageInput"
+                       name="Image"
+                       class="form-control"
+                       accept="image/*" />
+            </div>
+
+            <!-- PREVIEW -->
+            <div class="preview-container mb-4">
+
+                <i id="placeholderIcon"
+                   class="bi bi-image placeholder-icon"
+                   style="@(string.IsNullOrEmpty(Model.ProfilePictureURL) ? "display:block;" : "display:none;")">
+                </i>
+
+                <img id="previewImage"
+                     class="preview-img"
+                     src="@(!string.IsNullOrEmpty(Model.ProfilePictureURL)
+                                                ? Url.Content("~/Files/Images/" + Model.ProfilePictureURL)
+                                                : "")"
+                     style="@(string.IsNullOrEmpty(Model.ProfilePictureURL) ? "display:none;" : "display:block;")" />
+
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="d-flex justify-content-between">
+
+                <a asp-action="Index" class="btn btn-secondary">
+                    ⬅ Back
+                </a>
+
+                <button type="submit" class="btn btn-success">
+                    💾 Save
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>    
+<script>
+
+    const imageInput = document.getElementById("imageInput");
+    const previewImage = document.getElementById("previewImage");
+    const placeholderIcon = document.getElementById("placeholderIcon");
+
+    imageInput.addEventListener("change", function () {
+
+        const file = this.files[0];
+
+        if (!file) return;
+
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+
+            previewImage.src = e.target.result;
+            previewImage.style.display = "block";
+
+            placeholderIcon.style.display = "none";
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+</script>

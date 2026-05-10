@@ -1,0 +1,180 @@
+﻿@model UserViewModel
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-7">
+
+        <div class="card border-0 shadow-lg details-card">
+
+            <!-- HEADER -->
+            <div class="details-header text-center">
+
+                @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+                {
+                    <img src="@Url.Content($"~/Files/Images/{Model.ProfilePicture}")"
+                         class="profile-img" />
+                }
+                else
+                {
+                    <img src="https://ui-avatars.com/api/?name=@Model.FirstName+@Model.LastName&size=200"
+                         class="profile-img" />
+                }
+
+                <h3 class="fw-bold mt-3 mb-1">
+                    @Model.FirstName @Model.LastName
+                </h3>
+
+                <p class="text-light opacity-75 mb-0">
+                    @@@Model.UserName
+                </p>
+
+            </div>
+
+            <!-- BODY -->
+            <div class="card-body p-4">
+
+                <!-- EMAIL -->
+                <div class="info-box mb-3">
+
+                    <div class="info-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+
+                    <div>
+                        <small class="text-muted">Email</small>
+
+                        <h6 class="mb-0">
+                            @Model.Email
+                        </h6>
+                    </div>
+
+                </div>
+
+                <!-- USERNAME -->
+                <div class="info-box mb-3">
+
+                    <div class="info-icon">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+
+                    <div>
+                        <small class="text-muted">Username</small>
+
+                        <h6 class="mb-0">
+                            @Model.UserName
+                        </h6>
+                    </div>
+
+                </div>
+
+                <!-- ROLES -->
+                <div class="info-box mb-4">
+
+                    <div class="info-icon">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+
+                    <div>
+
+                        <small class="text-muted d-block mb-2">
+                            Roles
+                        </small>
+
+                        @if (Model.Roles.Count > 0)
+                        {
+                            @foreach (var role in Model.Roles)
+                            {
+                                <span class="badge bg-dark px-3 py-2 me-1">
+                                    @role
+                                </span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary px-3 py-2">
+                                No Role
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="d-flex justify-content-between">
+
+                    <a href="javascript:history.back()"
+                       class="btn btn-outline-dark px-4">
+
+                        <i class="fa fa-arrow-left me-2"></i>
+                        Back
+                    </a>
+
+                    <a asp-action="Edit"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-dark px-4">
+
+                        <i class="fa fa-pen me-2"></i>
+                        Edit User
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+
+    .details-card {
+        border-radius: 24px;
+        overflow: hidden;
+    }
+
+    .details-header {
+        background: linear-gradient(135deg,#1f1f2e,#2d3748);
+        padding: 40px 20px;
+    }
+
+    .profile-img {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid rgba(255,255,255,.2);
+    }
+
+    .details-header h3 {
+        color: white;
+    }
+
+    .info-box {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        background: #f8f9fa;
+        padding: 18px;
+        border-radius: 16px;
+    }
+
+    .info-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,.08);
+    }
+
+</style>

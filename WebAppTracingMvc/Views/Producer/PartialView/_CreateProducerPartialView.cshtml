@@ -1,0 +1,131 @@
+﻿<!-- ===================== -->
+<!-- CREATE MODAL -->
+<!-- ===================== -->
+
+<div class="modal fade" id="createProducerModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+                <h5 class="modal-title"> Add New Producer</h5>
+                <button type="button" class="bi bi-x-lg btn-outline-danger" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <form asp-action="Create" method="post" id="producerForm" enctype="multipart/form-data">
+
+                    <!-- NAME -->
+                    <input name="FullName"
+                           class="form-control mb-2 required-field"
+                           placeholder="Full Name" />
+
+                    <!-- BIO -->
+                    <textarea name="Bio"
+                              class="form-control mb-2 required-field"
+                              placeholder="Bio"></textarea>
+
+                  
+                    <!-- IMAGE -->
+                    <input type="file"
+                           name="Image"
+                           id="imgInput"
+                           class="form-control mb-2"
+                           accept="image/*" />
+
+                    <!-- PREVIEW -->
+                    <div class="text-center mb-3">
+
+                        <img id="preview"
+                             class="d-none"
+                             style="width:120px;height:120px;border-radius:50%;object-fit:cover;" />
+
+                        <p id="placeholder" class="text-muted">Image Preview</p>
+
+                    </div>
+
+                    <!-- SAVE -->
+                    <button id="saveBtn" class="btn btn-success w-100" disabled>
+                        💾 Save
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ===================== -->
+<!-- SCRIPT -->
+<!-- ===================== -->
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const form = document.getElementById("producerForm");
+        const saveBtn = document.getElementById("saveBtn");
+
+        const input = document.getElementById("imgInput");
+        const preview = document.getElementById("preview");
+        const placeholder = document.getElementById("placeholder");
+
+        // ================= VALIDATION =================
+        if (form && saveBtn) {
+
+            form.addEventListener("input", function () {
+
+                let valid = true;
+
+                form.querySelectorAll(".required-field").forEach(f => {
+                    if (!f.value.trim()) valid = false;
+                });
+
+                saveBtn.disabled = !valid;
+            });
+
+        }
+
+        // ================= IMAGE PREVIEW =================
+        if (input) {
+
+            input.addEventListener("change", function () {
+
+                const file = this.files?.[0];
+
+                if (file) {
+
+                    const url = URL.createObjectURL(file);
+
+                    if (preview) {
+                        preview.src = url;
+                        preview.classList.remove("d-none");
+                    }
+
+                    if (placeholder) {
+                        placeholder.style.display = "none";
+                    }
+
+                } else {
+
+                    if (preview) {
+                        preview.classList.add("d-none");
+                    }
+
+                    if (placeholder) {
+                        placeholder.style.display = "block";
+                    }
+
+                }
+
+            });
+
+        }
+
+    });
+
+</script>

@@ -1,0 +1,83 @@
+﻿@model IEnumerable<ActorViewModel>
+
+@if (Model != null && Model.Any())
+{
+    @foreach (var actor in Model)
+    {
+        <div class="col-md-4 mb-4">
+
+            <div class="card custom-card text-center p-4 h-100 position-relative">
+
+                <!-- DETAILS ICON TOP RIGHT -->
+                <div class="position-absolute top-0 end-0 m-2">
+
+                    <a asp-action="Details"
+                       asp-route-id="@actor.Id"
+                       class="btn btn-light rounded-circle shadow-sm icon-btn">
+
+                        <i class="fa-solid fa-circle-info text-primary"></i>
+
+                    </a>
+
+                </div>
+
+                <!-- IMAGE -->
+                <div class="avatar-box mb-3">
+
+                    @if (!string.IsNullOrEmpty(actor.ProfilePictureUrl))
+                    {
+                        <img src="@Url.Content($"~/Files/Images/{actor.ProfilePictureUrl}")" />
+                    }
+                    else
+                    {
+                        <i class="bi bi-person fs-1"></i>
+                    }
+
+                </div>
+
+                <!-- NAME -->
+                <h5 class="fw-bold">@actor.FullName</h5>
+
+                <!-- BIO -->
+                <p class="text-muted small">
+                    @actor.Bio
+                </p>
+
+                <!-- ACTIONS -->
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="mt-auto d-flex justify-content-center custom-gap">
+
+                        <a asp-action="Edit"
+                           asp-route-id="@actor.Id"
+                           class="btn btn-outline-warning icon-btn">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+
+                        <form asp-action="Delete"
+                              asp-route-id="@actor.Id"
+                              method="post">
+
+                            <button class="btn btn-outline-danger icon-btn"
+                                    onclick="return confirm('Are you sure?');">
+
+                                <i class="bi bi-trash"></i>
+
+                            </button>
+
+                        </form>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+    }
+}
+else
+{
+    <div class="text-center mt-5">
+        <h5 class="text-muted">No actors found 🎭</h5>
+    </div>
+}

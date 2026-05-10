@@ -1,0 +1,151 @@
+﻿@model CinemaViewModel
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+    .preview-box {
+        height: 220px;
+        border: 2px dashed #ddd;
+        border-radius: 15px;
+        background: #f8f9fa;
+        transition: 0.3s;
+    }
+
+        .preview-box:hover {
+            border-color: #0d6efd;
+        }
+
+    .avatar-preview {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        transition: 0.3s;
+    }
+
+    .icon-placeholder {
+        font-size: 50px;
+        color: #aaa;
+    }
+</style>
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow-lg p-4">
+
+                <h3 class="text-center mb-4">✏️ Edit Cinema</h3>
+
+                <form asp-action="Edit" method="post" enctype="multipart/form-data" id="editForm">
+
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Logo" id="oldImage" />
+
+                    <!-- NAME -->
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                    </div>
+
+                    <!-- DESCRIPTION -->
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label"></label>
+                        <textarea asp-for="Description" class="form-control"></textarea>
+                    </div>
+
+                    <!-- ADDRESS -->
+                    <div class="mb-3">
+                        <label asp-for="Address" class="form-label"></label>
+                        <input asp-for="Address" class="form-control" />
+                    </div>
+
+                    <!-- IMAGE INPUT -->
+                    <div class="mb-3">
+                        <label class="form-label">Cinema Image</label>
+                        <input type="file"
+                               class="form-control"
+                               id="imageInput"
+                               name="Image"
+                               accept="image/*" />
+                    </div>
+
+                    <!-- IMAGE PREVIEW -->
+                    <div class="mb-4 text-center">
+
+                        <div class="preview-box d-flex flex-column justify-content-center align-items-center"
+                             id="previewBox">
+
+                            <!-- placeholder icon -->
+                            <i class="bi bi-image icon-placeholder"
+                               id="placeholderIcon"
+                               style="display:none;"></i>
+
+                            <!-- OLD IMAGE (FROM DB) -->
+                            <img id="previewImage"
+                                 class="avatar-preview"
+                                 src="@(
+                                 !string.IsNullOrEmpty(Model.Logo)
+                                 ? Url.Content($"~/Files/Images/{Model.Logo}")
+                                 : ""
+                                                                  )" />
+
+                        </div>
+
+                    </div>
+
+                    <!-- BUTTONS -->
+                    <div class="d-flex justify-content-between">
+
+                        <a asp-action="Index" class="btn btn-secondary">
+                            ⬅ Back
+                        </a>
+
+                        <button type="submit" class="btn btn-success">
+                            💾 Save Changes
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= JS ================= -->
+<script>
+
+    const imageInput = document.getElementById("imageInput");
+    const previewImage = document.getElementById("previewImage");
+    const placeholder = document.getElementById("placeholderIcon");
+
+    // لو مفيش صورة قديمة
+    window.addEventListener("load", function () {
+        if (!previewImage.src || previewImage.src.includes("undefined")) {
+            previewImage.style.display = "none";
+            placeholder.style.display = "block";
+        }
+    });
+
+    // عند اختيار صورة جديدة
+    imageInput.addEventListener("change", function () {
+
+        const file = this.files[0];
+
+        if (file) {
+
+            const newUrl = URL.createObjectURL(file);
+
+            previewImage.src = newUrl;
+            previewImage.style.display = "block";
+            placeholder.style.display = "none";
+        }
+    });
+
+</script>

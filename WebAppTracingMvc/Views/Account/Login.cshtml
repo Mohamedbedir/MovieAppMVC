@@ -1,0 +1,72 @@
+﻿@model LoginViewModel
+
+@{
+    Layout = "~/Views/Shared/_SecurtyLayout.cshtml";
+    ViewData["Title"] = "Login";
+}
+
+<h3 class="title">Welcome Back</h3>
+
+<form asp-action="Login">
+
+    <div asp-validation-summary="ModelOnly"
+         class="alert alert-danger py-2 mb-3">
+    </div>
+
+    <!-- Username -->
+    <div class="form-floating mb-3">
+        <input asp-for="Email" class="form-control" placeholder="Email" />
+        <label>Username</label>
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <!-- Password -->
+    <div class="form-floating mb-3 position-relative">
+
+        <input type="password"
+               class="form-control pe-5"
+               id="password"
+               asp-for="Password"
+               placeholder="Password" />
+
+        <label>Password</label>
+
+        <!-- Eye Icon -->
+        <i class="fa fa-eye position-absolute top-50 end-0 translate-middle-y me-3"
+           style="cursor:pointer;"
+           onmousedown="showPassword('password')"
+           onmouseup="hidePassword('password')"
+           onmouseleave="hidePassword('password')"
+           ontouchstart="showPassword('password')"
+           ontouchend="hidePassword('password')">
+        </i>
+    </div>
+    <div class="text-end mb-3">
+        <a asp-action="ForgotPassword" class="auth-link">
+            Forgot Password?
+        </a>
+    </div>
+    <button class="btn btn-primary w-100 mb-3">
+        Login
+    </button>
+
+    <div class="text-center">
+        Don’t have account?
+        <a asp-action="Register" class="auth-link">Sign up</a>
+    </div>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<script>
+    function showPassword(id) {
+        document.getElementById(id).type = "text";
+    }
+
+    function hidePassword(id) {
+        document.getElementById(id).type = "password";
+    }
+</script>

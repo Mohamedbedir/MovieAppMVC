@@ -1,0 +1,228 @@
+﻿@model List<UserViewModel>
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+
+    <h2 class="fw-bold">
+        👥 Users
+    </h2>
+
+    <!-- LIVE SEARCH -->
+    <form method="get"
+          id="searchForm"
+          class="position-relative">
+
+        <i class="fa fa-search search-icon"></i>
+
+        <input type="text"
+               name="search"
+               value="@ViewBag.Search"
+               class="form-control search-input"
+               placeholder="Search by email..."
+               onkeyup="liveSearch()" />
+
+    </form>
+
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-warning">
+        No users found.
+    </div>
+}
+else
+{
+    <div class="row">
+
+        @foreach (var user in Model)
+        {
+            <div class="col-lg-4 col-md-6 mb-4">
+
+                <div class="card border-0 shadow-sm h-100 user-card">
+
+                    <div class="card-body text-center">
+
+                        <!-- IMAGE -->
+                        @if (!string.IsNullOrEmpty(user.ProfilePicture))
+                        {
+                            <img src="@Url.Content($"~/Files/Images/{user.ProfilePicture}")"
+                                 class="rounded-circle mb-3"
+                                 width="100"
+                                 height="100"
+                                 style="object-fit:cover;" />
+                        }
+                        else
+                        {
+                            <img src="https://ui-avatars.com/api/?name=@user.FirstName+@user.LastName"
+                                 class="rounded-circle mb-3"
+                                 width="100"
+                                 height="100" />
+                        }
+
+                        <!-- NAME -->
+                        <h5 class="fw-bold">
+                            @user.FirstName @user.LastName
+                        </h5>
+
+                        <!-- USERNAME -->
+                        <p class="text-muted mb-1">
+                            @@@user.UserName
+                        </p>
+
+                        <!-- EMAIL -->
+                        <p class="small text-secondary">
+                            @user.Email
+                        </p>
+
+                        <!-- ROLES -->
+                       @*  <div class="mt-3">
+
+                            @if (user.Roles.Count > 0)
+                            {
+                                @foreach (var role in user.Roles)
+                                {
+                                    <span class="badge bg-dark me-1 px-3 py-2">
+                                        @role
+                                    </span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary px-3 py-2">
+                                    No Role
+                                </span>
+                            }
+
+                        </div> *@
+
+                        <!-- ACTIONS -->
+                        <div class="user-actions">
+
+                            <!-- DETAILS -->
+                            <a asp-action="Details"
+                               asp-route-id="@user.Id"
+                               class="details-icon"
+                               title="Details">
+
+                                <i class="fa-solid fa-circle-info"></i>
+                            </a>
+
+                            <!-- EDIT -->
+                            <a asp-action="Edit"
+                               asp-route-id="@user.Id"
+                               class="edit-icon"
+                               title="Edit">
+
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+
+                            <!-- DELETE -->
+                            <form asp-action="Delete"
+                                  asp-route-id="@user.Id"
+                                  method="post"
+                                  class="delete-form">
+
+                                <button type="submit"
+                                        class="delete-icon"
+                                        title="Delete"
+                                        onclick="return confirm('Are you sure?')">
+
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+}
+
+<style>
+
+    .search-input {
+        padding-left: 40px;
+        border-radius: 12px;
+    }
+
+    .search-icon {
+        position: absolute;
+        top: 50%;
+        left: 14px;
+        transform: translateY(-50%);
+        color: #888;
+        z-index: 5;
+    }
+
+    .user-card {
+        position: relative;
+    }
+
+    /* ALL ICONS */
+    .user-actions a,
+    .user-actions button {
+        border: none;
+        background: transparent;
+        color: #555;
+        font-size: 20px;
+        transition: .3s;
+        position: absolute;
+    }
+
+        .user-actions a:hover,
+        .user-actions button:hover {
+            transform: scale(1.15);
+            color: black;
+        }
+
+    /* DETAILS */
+    .details-icon {
+        top: 15px;
+        right: 15px;
+    }
+
+    /* EDIT */
+    .edit-icon {
+        bottom: 15px;
+        left: 15px;
+    }
+
+    /* DELETE */
+    .delete-icon {
+        bottom: 15px;
+        right: 15px;
+    }
+
+    .delete-form {
+        margin: 0;
+    }
+
+</style>
+
+<script>
+
+    let timer;
+
+    function liveSearch() {
+
+        clearTimeout(timer);
+
+        timer = setTimeout(() => {
+
+            document.getElementById("searchForm").submit();
+
+        }, 500);
+
+    }
+
+</script>

@@ -1,0 +1,86 @@
+﻿@model IEnumerable<CinemaViewModel>
+
+    <style>
+
+    .icon-btn {
+        transition: .3s ease;
+    }
+
+        .icon-btn:hover {
+            transform: scale(1.1);
+        }
+    </style>
+
+@if (Model != null && Model.Any())
+{
+    @foreach (var cinema in Model)
+    {
+        <div class="col-md-4 mb-4">
+
+            <div class="card custom-card text-center p-4 h-100 position-relative">
+
+                <!-- DETAILS ICON TOP RIGHT -->
+                <div class="position-absolute top-0 end-0 m-2">
+
+                    <a href="/Cinema/Details/@cinema.Id"
+                       class="btn btn-light rounded-circle shadow-sm icon-btn">
+
+                        <i class="fa-solid fa-circle-info text-primary"></i>
+
+                    </a>
+
+                </div>
+
+                <!-- IMAGE -->
+                <div class="avatar-box mb-3">
+
+                    @if (!string.IsNullOrEmpty(cinema.Logo))
+                    {
+                        <img src="@Url.Content($"~/Files/Images/{cinema.Logo}")" />
+                    }
+                    else
+                    {
+                        <i class="bi bi-film fs-1"></i>
+                    }
+
+                </div>
+
+                <!-- NAME -->
+                <h5 class="fw-bold">@cinema.Name</h5>
+
+                <!-- DESCRIPTION -->
+                <p class="text-muted small">@cinema.Description</p>
+
+                <!-- ACTIONS -->
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="mt-auto d-flex justify-content-center custom-gap">
+
+                        <a href="/Cinema/Edit/@cinema.Id"
+                           class="btn btn-outline-warning icon-btn">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+
+                        <form action="/Cinema/Delete/@cinema.Id" method="post">
+                            @Html.AntiForgeryToken()
+
+                            <button class="btn btn-outline-danger icon-btn"
+                                    onclick="return confirm('Are you sure?');">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+    }
+}
+else
+{
+    <div class="col-12 text-center mt-5">
+        <h5 class="text-muted">No cinemas found 🎬</h5>
+    </div>
+}

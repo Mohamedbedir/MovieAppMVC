@@ -1,0 +1,75 @@
+﻿@model IEnumerable<ProducerViewModel>
+
+@if (Model != null && Model.Any())
+{
+    @foreach (var producer in Model)
+    {
+        <div class="col-md-4 mb-4">
+
+            <div class="card custom-card text-center p-4 h-100 position-relative">
+
+                <!-- DETAILS ICON TOP RIGHT -->
+                <div class="position-absolute top-0 end-0 m-2">
+
+                    <a href="/Producer/Details/@producer.Id"
+                       class="btn btn-light rounded-circle shadow-sm icon-btn">
+
+                        <i class="fa-solid fa-circle-info text-primary"></i>
+
+                    </a>
+
+                </div>
+
+                <!-- IMAGE -->
+                <div class="avatar-box mb-3">
+
+                    @if (!string.IsNullOrEmpty(producer.ProfilePictureURL))
+                    {
+                        <img src="@Url.Content($"~/Files/Images/{producer.ProfilePictureURL}")" />
+                    }
+                    else
+                    {
+                        <i class="bi bi-person fs-1"></i>
+                    }
+
+                </div>
+
+                <!-- NAME -->
+                <h5 class="fw-bold">@producer.FullName</h5>
+
+                <!-- BIO -->
+                <p class="text-muted small">@producer.Bio</p>
+
+                <!-- ACTIONS -->
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="mt-auto d-flex justify-content-center custom-gap">
+
+                        <a href="/Producer/Edit/@producer.Id"
+                           class="btn btn-outline-warning icon-btn">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+
+                        <form action="/Producer/Delete/@producer.Id" method="post">
+                            @Html.AntiForgeryToken()
+
+                            <button class="btn btn-outline-danger icon-btn"
+                                    onclick="return confirm('Are you sure?');">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+    }
+}
+else
+{
+    <div class="col-12 text-center mt-5">
+        <h5 class="text-muted">No producers found 🎬</h5>
+    </div>
+}

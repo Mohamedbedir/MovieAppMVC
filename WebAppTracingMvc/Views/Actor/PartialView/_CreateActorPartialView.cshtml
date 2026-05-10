@@ -1,0 +1,110 @@
+﻿@model ActorViewModel
+
+<div class="modal fade" id="createActorModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+                <h5 class="modal-title">➕ Add Actor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <form asp-action="Create"
+                      method="post"
+                      enctype="multipart/form-data"
+                      id="actorForm">
+
+                    @Html.AntiForgeryToken()
+
+                    <!-- NAME -->
+                    <input asp-for="FullName"
+                           class="form-control mb-2 required-field"
+                           placeholder="Actor Name" />
+
+                    <!-- BIO -->
+                    <textarea asp-for="Bio"
+                              class="form-control mb-2 required-field"
+                              placeholder="Bio"></textarea>
+
+                    <!-- SALARY -->
+                    <input asp-for="Salary"
+                           type="number"
+                           class="form-control mb-2 required-field"
+                           placeholder="Salary" />
+
+                    <!-- IMAGE -->
+                    <input asp-for="Image"
+                           type="file"
+                           id="imgInput"
+                           class="form-control mb-2"
+                           accept="image/*" />
+
+                    <!-- PREVIEW -->
+                    <div class="text-center mb-3">
+
+                        <img id="preview"
+                             class="d-none"
+                             style="width:120px;height:120px;border-radius:50%;object-fit:cover;" />
+
+                        <p id="placeholder" class="text-muted">
+                            Image Preview
+                        </p>
+
+                    </div>
+
+                    <!-- SAVE -->
+                    <button id="saveBtn"
+                            class="btn btn-success w-100"
+                            disabled>
+                        💾 Save
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const form = document.getElementById("actorForm");
+    const saveBtn = document.getElementById("saveBtn");
+
+    form.addEventListener("input", () => {
+
+        let valid = true;
+
+        document.querySelectorAll("#actorForm .required-field").forEach(f => {
+            if (!f.value.trim()) valid = false;
+        });
+
+        saveBtn.disabled = !valid;
+    });
+
+    const inputImg = document.getElementById("imgInput");
+    const preview = document.getElementById("preview");
+    const placeholder = document.getElementById("placeholder");
+
+    inputImg.addEventListener("change", () => {
+
+        const file = inputImg.files[0];
+
+        if (file) {
+            const url = URL.createObjectURL(file);
+            preview.src = url;
+            preview.classList.remove("d-none");
+            placeholder.style.display = "none";
+        } else {
+            preview.classList.add("d-none");
+            placeholder.style.display = "block";
+        }
+
+    });
+
+</script>
