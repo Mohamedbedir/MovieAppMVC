@@ -7,6 +7,7 @@ namespace WebAppTracingMvc.Helpers
 {
     public class EmailSettings
     {
+        // send Email 
         public static async Task SendEmailAsync(Email email)
         {
             var client = new SmtpClient("smtp.gmail.com", 587)
